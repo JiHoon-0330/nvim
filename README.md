@@ -1,5 +1,9 @@
 # nvim 설정
 
+### neovim/LazyVim 설치
+- `brew install neovim`
+- `git clone https://github.com/LazyVim/starter ~/.config/nvim`
+
 ### 테마 설정
 - `~/.config/nvim/lua/plugins/theme.lua` 경로에 추가
 ```lua
