@@ -26,11 +26,13 @@ return {
 }
 ```
 
-### 복사 설정
-- space + ff
+### 옵션 설정하기
+- space + space
 - `options.lua` 파일에 추가
 ```lua
-vim.opt.clipboard = "unnamedplus"
+vim.opt.clipboard = "unnamedplus" -- 복사
+vim.opt.scrolloff = 10 -- 세로 여유
+vim.opt.sidescrolloff = 8 -- 가로 여유
 ```
 
 ### im-select 설정하기
@@ -65,3 +67,28 @@ end)
 
 appWatcher:start()
 ```
+
+### autosave 설정하기
+- `~/.config/nvim/lua/plugins/autosave.lua` 경로에 추가
+```lua
+return {
+  "okuuva/auto-save.nvim",
+  event = { "InsertLeave", "TextChanged" },
+  opts = {
+    enabled = true,
+    debounce_delay = 1000, -- 1초 후 저장
+    trigger_events = { "InsertLeave" }, -- 입력 모드에서 나갈 때(Esc) 저장
+    condition = function(buf)
+      local fn = vim.fn
+      if fn.getbufvar(buf, "&modifiable") == 1 then
+        return true
+      end
+      return false
+    end,
+  },
+}
+```
+
+### lsp 설정하기
+- `:LazyExtras` 입력 후 원하는 것 `x` 로 활성화
+- `:Mason` 으로 실행중인 것 확인
