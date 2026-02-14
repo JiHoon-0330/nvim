@@ -100,6 +100,9 @@ return {
 }
 ```
 
+### lazygit 설치하기
+- `brew install lazygit`
+
 ### lsp 설정하기
 - `:LazyExtras` 입력 후 원하는 것 `x` 로 활성화
 - `:Mason` 으로 실행중인 것 확인
