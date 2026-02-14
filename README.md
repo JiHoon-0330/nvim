@@ -73,18 +73,29 @@ appWatcher:start()
 ```lua
 return {
   "okuuva/auto-save.nvim",
-  event = { "InsertLeave", "TextChanged" },
+  version = "^1.0.0", -- 최신 태그 버전 사용
+  event = { "InsertLeave", "TextChanged" }, -- 삽입 모드 나갈 때, 텍스트 변경 시 로드
   opts = {
-    enabled = true,
-    debounce_delay = 1000, -- 1초 후 저장
-    trigger_events = { "InsertLeave" }, -- 입력 모드에서 나갈 때(Esc) 저장
+    enabled = true, -- 시작 시 활성화
+    trigger_events = {
+      immediate_save = { "BufLeave", "FocusLost" }, -- 즉시 저장 이벤트
+      defer_save = { "InsertLeave", "TextChanged" }, -- 1초 뒤 저장 이벤트
+      cancel_deferred_save = { "InsertEnter" }, -- 다시 입력을 시작하면 저장 취소
+    },
     condition = function(buf)
       local fn = vim.fn
-      if fn.getbufvar(buf, "&modifiable") == 1 then
+      local utils = require("auto-save.utils.data")
+      -- 1. 수정 가능한 버퍼인지 확인
+      -- 2. 특수 버퍼(terminal, prompt 등)가 아닌지 확인
+      if fn.getbufvar(buf, "&modifiable") == 1 and
+         fn.getbufvar(buf, "&buftype") == "" then
         return true
       end
       return false
     end,
+    write_all_buffers = false,
+    debounce_delay = 100, -- 1초 대기
+    debug = false,
   },
 }
 ```
